@@ -27,9 +27,23 @@ setTimeout(() => {
 let clickTimes = [];
 const SPAM_THRESHOLD = 7; 
 let firstVideoStarted = false;
+let transitionsToLoop = false;
 
 const firstVideo = document.getElementById('first-clip');
 const secondVideo = document.getElementById('second-clip');
+
+// When the first video naturally ends, if the user is still spamming, go straight to the looping video
+firstVideo.addEventListener('ended', () => {
+    if (clickTimes.length >= SPAM_THRESHOLD) {
+        firstVideo.style.display = 'none';
+        secondVideo.style.display = 'block';
+        secondVideo.play();
+        transitionsToLoop = true;
+    } else {
+        // If they stopped clicking by the time it finished, hide everything
+        resetVideos();
+    }
+});
 
 function checkSpamSpeed() {
     const now = Date.now();
@@ -41,23 +55,34 @@ function checkSpamSpeed() {
             firstVideoStarted = true;
             firstVideo.style.display = 'block';
             firstVideo.play();
-        } else if (firstVideo.currentTime > 0 && !firstVideo.paused) {
-            firstVideo.style.display = 'none';
-            firstVideo.pause();
+        } else if (transitionsToLoop && secondVideo.paused) {
+            // Keep looping second video alive if they are active
             secondVideo.style.display = 'block';
             secondVideo.play();
         }
     }
 }
 
+function resetVideos() {
+    firstVideo.pause(); 
+    firstVideo.currentTime = 0; 
+    firstVideo.style.display = 'none';
+    
+    secondVideo.pause(); 
+    secondVideo.currentTime = 0; 
+    secondVideo.style.display = 'none';
+    
+    firstVideoStarted = false;
+    transitionsToLoop = false;
+}
+
+// Monitors if the player stops clicking
 setInterval(() => {
     const now = Date.now();
     clickTimes = clickTimes.filter(time => now - time < 1000);
 
     if (clickTimes.length === 0) {
-        firstVideo.pause(); firstVideo.currentTime = 0; firstVideo.style.display = 'none';
-        secondVideo.pause(); secondVideo.currentTime = 0; secondVideo.style.display = 'none';
-        firstVideoStarted = false;
+        resetVideos();
     }
 }, 800);
 
@@ -91,20 +116,4 @@ baldiBtn.addEventListener('mousedown', () => {
 });
 
 document.getElementById('upgrade-click').addEventListener('click', () => {
-    if (notebooks >= clickCost) { notebooks -= clickCost; notebooksPerClick += 1; clickCost = Math.round(clickCost * 1.5); updateUI(); }
-});
-document.getElementById('upgrade-multiplier').addEventListener('click', () => {
-    if (notebooks >= multCost) { notebooks -= multCost; multiplier *= 2; multCost = Math.round(multCost * 2.5); updateUI(); }
-});
-document.getElementById('upgrade-auto1').addEventListener('click', () => {
-    if (notebooks >= auto1Cost) { notebooks -= auto1Cost; notebooksPerSecond += 1; auto1Cost = Math.round(auto1Cost * 1.6); updateUI(); }
-});
-document.getElementById('upgrade-auto2').addEventListener('click', () => {
-    if (notebooks >= auto2Cost) { notebooks -= auto2Cost; notebooksPerSecond += 5; auto2Cost = Math.round(auto2Cost * 1.7); updateUI(); }
-});
-
-setInterval(() => {
-    if (notebooksPerSecond > 0) { notebooks += (notebooksPerSecond / 10); updateUI(); }
-}, 100);
-
-updateUI();
+    if

@@ -9,13 +9,13 @@
 
     <style>
         body {
-            /* Applied Comic Neue as the primary font for the entire game */
             font-family: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
             color: white;
-            text-align: center;
             margin: 0;
             padding: 20px;
             overflow-x: hidden;
+            box-sizing: border-box;
+            height: 100vh;
         }
 
         body::before {
@@ -33,27 +33,206 @@
             transform: scale(1.1);
         }
 
-        h1 {
-            color: #00ff00;
-            text-shadow: 3px 3px black;
+        /* Split layout container */
+        .game-layout {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+            max-width: 1100px;
+            margin: 0 auto;
+            gap: 20px;
+            height: calc(100vh - 40px);
         }
 
-        .game-container {
+        /* Left Side: Score and Baldi Clicker */
+        .left-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             background-color: rgba(51, 51, 51, 0.85);
             border: 5px solid #ff0000;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
             border-radius: 10px;
+            padding: 20px;
             box-shadow: 0px 0px 20px rgba(0,0,0,0.7);
         }
 
-        .stats {
-            font-size: 24px;
+        .score-container {
+            text-align: center;
             margin-bottom: 20px;
-            text-shadow: 2px 2px black;
         }
 
+        h1 {
+            color: #00ff00;
+            text-shadow: 3px 3px black;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+
+        .stats {
+            font-size: 28px;
+            text-shadow: 2px 2px black;
+            font-weight: bold;
+        }
+
+        .nps-stats {
+            font-size: 18px;
+            color: #00ff00;
+            text-shadow: 1px 1px black;
+            margin-top: 5px;
+        }
+
+        /* Clicker area holding either Baldi or the video */
+        .clicker-box {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #baldi-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.1s;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        #baldi-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        #baldi-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Video overlays perfectly over Baldi */
+        #first-clip, #second-clip {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 4px solid yellow;
+            z-index: 5;
+            background: black;
+            object-fit: cover;
+            border-radius: 5px;
+            pointer-events: none; /* Allows clicks to go through to the button underneath */
+        }
+
+        #first-clip {
+            animation: fadeInVideo 2.3s ease-in-out forwards;
+        }
+
+        @keyframes fadeInVideo {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Right Side: Upgrades Shop (Always Open) */
+        .right-side {
+            width: 400px;
+            background-color: rgba(34, 34, 34, 0.95);
+            border: 5px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .panel-header h3 {
+            margin: 0;
+            color: #00ff00;
+            font-size: 24px;
+            text-align: center;
+            border-bottom: 2px solid white;
+            padding-bottom: 10px;
+        }
+
+        .cube-wrapper {
+            perspective: 400px;
+            width: 80px;
+            height: 80px;
+            margin: 15px auto;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: spinCube 6s linear infinite;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 2px solid #00ff00;
+            background-color: rgba(0, 0, 0, 0.7);
+            box-sizing: border-box;
+        }
+
+        .cube-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .front  { transform: rotateY(  0deg) translateZ(40px); }
+        .back   { transform: rotateY(180deg) translateZ(40px); }
+        .right  { transform: rotateY( 90deg) translateZ(40px); }
+        .left   { transform: rotateY(-90deg) translateZ(40px); }
+        .top    { transform: rotateX( 90deg) translateZ(40px); }
+        .bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+        @keyframes spinCube {
+            from { transform: rotateX(0deg) rotateY(0deg); }
+            to { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        h4 {
+            margin: 15px 0 5px 0;
+            color: #ffff00;
+            text-align: left;
+            font-size: 18px;
+        }
+
+        .upgrade-btn {
+            background-color: #0000ff;
+            color: white;
+            border: 2px solid white;
+            padding: 10px 15px;
+            font-size: 14px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+
+        .upgrade-btn:disabled {
+            background-color: #555;
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        /* Loading Screen Setup */
         #loading-screen {
             position: fixed;
             top: 0;
@@ -113,159 +292,15 @@
             text-shadow: 1px 1px black;
         }
 
-        #baldi-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        #baldi-btn:active {
-            transform: scale(0.95);
-        }
-
-        #first-clip, #second-clip {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 400px;
-            border: 4px solid yellow;
-            z-index: 10;
-            background: black;
-        }
-
-        #first-clip {
-            animation: fadeInVideo 2.3s ease-in-out forwards;
-        }
-
-        @keyframes fadeInVideo {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        #open-panel-btn {
-            background-color: #ffff00;
-            color: black;
-            border: 3px solid white;
-            padding: 10px 20px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 15px;
-            box-shadow: 2px 2px 5px black;
-            font-family: inherit; /* Inherits Comic Neue font */
-        }
-
-        #upgrades-panel {
-            display: none;
-            position: absolute;
-            top: 5%;
-            left: 5%;
-            width: 90%;
-            background-color: rgba(34, 34, 34, 0.95);
-            border: 4px solid #00ff00;
-            border-radius: 10px;
-            padding: 15px;
-            box-sizing: border-box;
-            z-index: 20;
-            max-height: 90%;
-            overflow-y: auto;
-        }
-
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid white;
-            padding-bottom: 5px;
-        }
-
-        .panel-header h3 {
-            margin: 0;
-            color: #00ff00;
-        }
-
-        #close-panel-btn {
-            background-color: #ff0000;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 3px;
-            font-family: inherit;
-        }
-
-        .cube-wrapper {
-            perspective: 400px;
-            width: 100px;
-            height: 100px;
-            margin: 20px auto;
-        }
-
-        .cube {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: spinCube 6s linear infinite;
-        }
-
-        .cube-face {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border: 2px solid #00ff00;
-            background-color: rgba(0, 0, 0, 0.7);
-            box-sizing: border-box;
-        }
-
-        .cube-face img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .front  { transform: rotateY(  0deg) translateZ(50px); }
-        .back   { transform: rotateY(180deg) translateZ(50px); }
-        .right  { transform: rotateY( 90deg) translateZ(50px); }
-        .left   { transform: rotateY(-90deg) translateZ(50px); }
-        .top    { transform: rotateX( 90deg) translateZ(50px); }
-        .bottom { transform: rotateX(-90deg) translateZ(50px); }
-
-        @keyframes spinCube {
-            from { transform: rotateX(0deg) rotateY(0deg); }
-            to { transform: rotateX(360deg) rotateY(360deg); }
-        }
-
-        h4 {
-            margin: 15px 0 5px 0;
-            color: #ffff00;
-            text-align: left;
-        }
-
-        .upgrade-btn {
-            background-color: #0000ff;
-            color: white;
-            border: 2px solid white;
-            padding: 10px 20px;
-            font-size: 14px;
-            margin: 5px 0;
-            cursor: pointer;
-            border-radius: 5px;
-            width: 100%;
-            text-align: left;
-            font-family: inherit; /* Inherits Comic Neue font */
-        }
-
-        .upgrade-btn:disabled {
-            background-color: #555;
-            color: #888;
-            cursor: not-allowed;
+        /* Responsive stack for smaller laptop screens */
+        @media (max-width: 800px) {
+            .game-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .right-side {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -284,26 +319,28 @@
         </div>
     </div>
 
-    <h1>Baldi's Basics Clicker</h1>
-    
-    <div class="game-container" style="position: relative;">
-        <div class="stats">Notebooks: <span id="notebook-count">0</span></div>
-        <div class="stats" style="font-size: 16px;">NPS: <span id="nps-count">0</span></div>
+    <div class="game-layout">
+        
+        <div class="left-side">
+            <div class="score-container">
+                <h1>Baldi's Basics Clicker</h1>
+                <div class="stats">Notebooks: <span id="notebook-count">0</span></div>
+                <div class="nps-stats">NPS: <span id="nps-count">0</span></div>
+            </div>
 
-        <button id="baldi-btn">
-            <img src="images/ClickThis.png" alt="Baldi Target" style="width: 200px; height: auto;">
-        </button>
+            <div class="clicker-box">
+                <video id="first-clip" src="videos/FirstClip.mp4" muted></video>
+                <video id="second-clip" src="videos/SecondClip.mp4" loop muted></video>
 
-        <video id="first-clip" src="videos/FirstClip.mp4" muted></video>
-        <video id="second-clip" src="videos/SecondClip.mp4" loop muted></video>
+                <button id="baldi-btn">
+                    <img src="images/ClickThis.png" alt="Baldi Target">
+                </button>
+            </div>
+        </div>
 
-        <br>
-        <button id="open-panel-btn">OPEN UPGRADES SHOP</button>
-
-        <div id="upgrades-panel">
+        <div class="right-side">
             <div class="panel-header">
                 <h3>School Store Upgrades</h3>
-                <button id="close-panel-btn">X</button>
             </div>
             
             <div class="cube-wrapper">
@@ -333,6 +370,7 @@
                 BSODA ( +5 NPS ) <br> Cost: <span id="auto2-cost">250</span> Notebooks
             </button>
         </div>
+
     </div>
 
     <script>
@@ -402,7 +440,6 @@
         const notebookDisplay = document.getElementById('notebook-count');
         const npsDisplay = document.getElementById('nps-count');
         const baldiBtn = document.getElementById('baldi-btn');
-        const panel = document.getElementById('upgrades-panel');
 
         function updateUI() {
             notebookDisplay.textContent = Math.floor(notebooks);
@@ -428,9 +465,6 @@
             updateUI();
             checkSpamSpeed();
         });
-
-        document.getElementById('open-panel-btn').addEventListener('click', () => panel.style.display = 'block');
-        document.getElementById('close-panel-btn').addEventListener('click', () => panel.style.display = 'none');
 
         document.getElementById('upgrade-click').addEventListener('click', () => {
             if (notebooks >= clickCost) { notebooks -= clickCost; notebooksPerClick += 1; clickCost = Math.round(clickCost * 1.5); updateUI(); }

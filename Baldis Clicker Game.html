@@ -7,7 +7,297 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght=400;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="Style.css">
+    <style>
+        body {
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+            box-sizing: border-box;
+            height: 100vh;
+        }
+
+        /* Background image setup */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('BackgroundMain.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(8px);
+            z-index: -1;
+            transform: scale(1.1);
+        }
+
+        .game-layout {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+            max-width: 1100px;
+            margin: 0 auto;
+            gap: 20px;
+            height: calc(100vh - 40px);
+        }
+
+        .left-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(51, 51, 51, 0.85);
+            border: 5px solid #ff0000;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.7);
+        }
+
+        .score-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #00ff00;
+            text-shadow: 3px 3px black;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+
+        .stats {
+            font-size: 28px;
+            text-shadow: 2px 2px black;
+            font-weight: bold;
+        }
+
+        .nps-stats {
+            font-size: 18px;
+            color: #00ff00;
+            text-shadow: 1px 1px black;
+            margin-top: 5px;
+        }
+
+        .clicker-box {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #baldi-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.1s;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        #baldi-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        #baldi-btn:active {
+            transform: scale(0.95);
+        }
+
+        #first-clip, #second-clip {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 4px solid yellow;
+            z-index: 5;
+            background: black;
+            object-fit: cover;
+            border-radius: 5px;
+            pointer-events: none;
+        }
+
+        #first-clip {
+            animation: fadeInVideo 2.3s ease-in-out forwards;
+        }
+
+        @keyframes fadeInVideo {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .right-side {
+            width: 400px;
+            background-color: rgba(34, 34, 34, 0.95);
+            border: 5px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .panel-header h3 {
+            margin: 0;
+            color: #00ff00;
+            font-size: 24px;
+            text-align: center;
+            border-bottom: 2px solid white;
+            padding-bottom: 10px;
+        }
+
+        .cube-wrapper {
+            perspective: 400px;
+            width: 80px;
+            height: 80px;
+            margin: 15px auto;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: spinCube 6s linear infinite;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 2px solid #00ff00;
+            background-color: rgba(0, 0, 0, 0.7);
+            box-sizing: border-box;
+        }
+
+        .cube-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .front  { transform: rotateY(  0deg) translateZ(40px); }
+        .back   { transform: rotateY(180deg) translateZ(40px); }
+        .right  { transform: rotateY( 90deg) translateZ(40px); }
+        .left   { transform: rotateY(-90deg) translateZ(40px); }
+        .top    { transform: rotateX( 90deg) translateZ(40px); }
+        .bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+        @keyframes spinCube {
+            from { transform: rotateX(0deg) rotateY(0deg); }
+            to { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        h4 {
+            margin: 15px 0 5px 0;
+            color: #ffff00;
+            text-align: left;
+            font-size: 18px;
+        }
+
+        .upgrade-btn {
+            background-color: #0000ff;
+            color: white;
+            border: 2px solid white;
+            padding: 10px 15px;
+            font-size: 14px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+
+        .upgrade-btn:disabled {
+            background-color: #555;
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #loading-screen::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('BackgroundMain.png');
+            background-size: cover;
+            background-position: center;
+            filter: blur(12px);
+            z-index: -1;
+        }
+
+        .loading-box {
+            background-color: rgba(51, 51, 51, 0.95);
+            border: 5px solid #00ff00;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 0 25px black;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border-left-color: #00ff00;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #fact-display {
+            color: #ffff00;
+            font-style: italic;
+            font-size: 18px;
+            margin-top: 15px;
+            text-shadow: 1px 1px black;
+        }
+
+        @media (max-width: 800px) {
+            .game-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .right-side {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -15,17 +305,14 @@
         <div class="loading-box">
             <h2>LOADING SCHOOLHOUSE...</h2>
             <div class="spinner"></div>
-            
             <div style="font-size: 14px; color: #ffffff; margin-bottom: 10px; font-weight: bold; text-shadow: 1px 1px 2px #000000;">
                 &copy; Made By Izayah Orona
             </div>
-            
             <div id="fact-display">Loading...</div>
         </div>
     </div>
 
     <div class="game-layout">
-        
         <div class="left-side">
             <div class="score-container">
                 <h1>Baldi's Basics Clicker</h1>
@@ -90,9 +377,177 @@
                 Infinite Detention ( +1,000 NPS ) <br> Cost: <span id="detention-cost">150,000</span> Notebooks
             </button>
         </div>
-
     </div>
 
-    <script src="Style2.js"></script>
+    <script>
+        let notebooks = 0;
+        let notebooksPerClick = 1;
+        let multiplier = 1;
+        let notebooksPerSecond = 0;
+
+        let clickCost = 15;
+        let multCost = 100;
+        let ropeCost = 1000;
+        let rulerCost = 1000000;
+
+        let auto1Cost = 50;
+        let auto2Cost = 250;
+        let whistleCost = 1500;
+        let craftersCost = 10000;
+        let detentionCost = 150000;
+
+        const baldiFacts = [
+            "Fact: The original game was made in just a few days for a game jam!",
+            "Fact: Arts and Crafters is the shy sock puppet who attacks if you look at him too long.",
+            "Fact: The Principal of the Thing will send you to detention if he catches you running.",
+            "Fact: Baldi's favorite food is crunchy quarters... just kidding, he likes notebooks!",
+            "Fact: Playtime just wants to jump rope with you. Five times!",
+            "Fact: If you click so fast on baldi duddy and Mike(Michael) will appear!"
+        ];
+
+        const randomFact = baldiFacts[Math.floor(Math.random() * baldiFacts.length)];
+        document.getElementById('fact-display').textContent = randomFact;
+
+        // Hide the screen after 3 seconds
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.display = 'none';
+        }, 3000);
+
+        let clickTimes = [];
+        const SPAM_THRESHOLD = 7; 
+        let firstVideoStarted = false;
+        let transitionsToLoop = false;
+
+        const firstVideo = document.getElementById('first-clip');
+        const secondVideo = document.getElementById('second-clip');
+
+        firstVideo.addEventListener('ended', () => {
+            if (clickTimes.length >= SPAM_THRESHOLD) {
+                firstVideo.style.display = 'none';
+                secondVideo.style.display = 'block';
+                secondVideo.loop = true;
+                secondVideo.play().catch(err => console.log("Audio waiting for interaction", err));
+                transitionsToLoop = true;
+            } else {
+                resetVideos();
+            }
+        });
+
+        function checkSpamSpeed() {
+            const now = Date.now();
+            clickTimes.push(now);
+            clickTimes = clickTimes.filter(time => now - time < 1000);
+
+            if (clickTimes.length >= SPAM_THRESHOLD) {
+                if (!firstVideoStarted) {
+                    firstVideoStarted = true;
+                    firstVideo.style.display = 'block';
+                    firstVideo.play().catch(err => console.log("Audio waiting for interaction", err));
+                }
+            }
+        }
+
+        function resetVideos() {
+            firstVideo.pause(); 
+            firstVideo.currentTime = 0; 
+            firstVideo.style.display = 'none';
+            
+            secondVideo.pause(); 
+            secondVideo.currentTime = 0; 
+            secondVideo.style.display = 'none';
+            
+            firstVideoStarted = false;
+            transitionsToLoop = false;
+        }
+
+        setInterval(() => {
+            const now = Date.now();
+            clickTimes = clickTimes.filter(time => now - time < 1000);
+
+            if (clickTimes.length === 0) {
+                resetVideos();
+            }
+        }, 800);
+
+        const notebookDisplay = document.getElementById('notebook-count');
+        const npsDisplay = document.getElementById('nps-count');
+        const baldiBtn = document.getElementById('baldi-btn');
+
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function updateUI() {
+            notebookDisplay.textContent = formatNumber(Math.floor(notebooks));
+            npsDisplay.textContent = formatNumber(notebooksPerSecond);
+            
+            document.getElementById('click-cost').textContent = formatNumber(clickCost);
+            document.getElementById('mult-cost').textContent = formatNumber(multCost);
+            document.getElementById('rope-cost').textContent = formatNumber(ropeCost);
+            document.getElementById('ruler-cost').textContent = formatNumber(rulerCost);
+
+            document.getElementById('auto1-cost').textContent = formatNumber(auto1Cost);
+            document.getElementById('auto2-cost').textContent = formatNumber(auto2Cost);
+            document.getElementById('whistle-cost').textContent = formatNumber(whistleCost);
+            document.getElementById('crafters-cost').textContent = formatNumber(craftersCost);
+            document.getElementById('detention-cost').textContent = formatNumber(detentionCost);
+
+            document.getElementById('upgrade-click').disabled = notebooks < clickCost;
+            document.getElementById('upgrade-multiplier').disabled = notebooks < multCost;
+            document.getElementById('upgrade-rope').disabled = notebooks < ropeCost;
+            document.getElementById('upgrade-ruler').disabled = notebooks < rulerCost;
+
+            document.getElementById('upgrade-auto1').disabled = notebooks < auto1Cost;
+            document.getElementById('upgrade-auto2').disabled = notebooks < auto2Cost;
+            document.getElementById('upgrade-whistle').disabled = notebooks < whistleCost;
+            document.getElementById('upgrade-crafters').disabled = notebooks < craftersCost;
+            document.getElementById('upgrade-detention').disabled = notebooks < detentionCost;
+        }
+
+        baldiBtn.addEventListener('keydown', (e) => {
+            if (e.repeat) { e.preventDefault(); return; }
+        });
+
+        baldiBtn.addEventListener('mousedown', () => {
+            notebooks += (notebooksPerClick * multiplier);
+            updateUI();
+            checkSpamSpeed();
+        });
+
+        document.getElementById('upgrade-click').addEventListener('click', () => {
+            if (notebooks >= clickCost) { notebooks -= clickCost; notebooksPerClick += 1; clickCost = Math.round(clickCost * 1.5); updateUI(); }
+        });
+        document.getElementById('upgrade-multiplier').addEventListener('click', () => {
+            if (notebooks >= multCost) { notebooks -= multCost; multiplier *= 2; multCost = Math.round(multCost * 2.5); updateUI(); }
+        });
+        document.getElementById('upgrade-rope').addEventListener('click', () => {
+            if (notebooks >= ropeCost) { notebooks -= ropeCost; notebooksPerClick += 10; ropeCost = Math.round(ropeCost * 1.8); updateUI(); }
+        });
+        document.getElementById('upgrade-ruler').addEventListener('click', () => {
+            if (notebooks >= rulerCost) { notebooks -= rulerCost; multiplier *= 5; rulerCost = Math.round(rulerCost * 4); updateUI(); }
+        });
+
+        document.getElementById('upgrade-auto1').addEventListener('click', () => {
+            if (notebooks >= auto1Cost) { notebooks -= auto1Cost; notebooksPerSecond += 1; auto1Cost = Math.round(auto1Cost * 1.6); updateUI(); }
+        });
+        document.getElementById('upgrade-auto2').addEventListener('click', () => {
+            if (notebooks >= auto2Cost) { notebooks -= auto2Cost; notebooksPerSecond += 5; auto2Cost = Math.round(auto2Cost * 1.7); updateUI(); }
+        });
+        document.getElementById('upgrade-whistle').addEventListener('click', () => {
+            if (notebooks >= whistleCost) { notebooks -= whistleCost; notebooksPerSecond += 25; whistleCost = Math.round(whistleCost * 1.7); updateUI(); }
+        });
+        document.getElementById('upgrade-crafters').addEventListener('click', () => {
+            if (notebooks >= craftersCost) { notebooks -= craftersCost; notebooksPerSecond += 150; craftersCost = Math.round(craftersCost * 1.8); updateUI(); }
+        });
+        document.getElementById('upgrade-detention').addEventListener('click', () => {
+            if (notebooks >= detentionCost) { notebooks -= detentionCost; notebooksPerSecond += 1000; detentionCost = Math.round(detentionCost * 2); updateUI(); }
+        });
+
+        setInterval(() => {
+            if (notebooksPerSecond > 0) { notebooks += (notebooksPerSecond / 10); updateUI(); }
+        }, 100);
+
+        updateUI();
+    </script>
 </body>
 </html>

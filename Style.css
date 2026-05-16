@@ -8,6 +8,7 @@ body {
     height: 100vh;
 }
 
+/* This targets your BackgroundMain.png and blurs it nicely */
 body::before {
     content: "";
     position: fixed;
@@ -18,12 +19,12 @@ body::before {
     background-image: url('BackgroundMain.png');
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     filter: blur(8px);
     z-index: -1;
-    transform: scale(1.1);
+    transform: scale(1.1); /* Hides the white artifact edges from blurring */
 }
 
-/* Split layout container matching your layout drawing */
 .game-layout {
     display: flex;
     flex-direction: row;
@@ -35,14 +36,13 @@ body::before {
     height: calc(100vh - 40px);
 }
 
-/* Left Side: Score and Baldi Clicker */
 .left-side {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(51, 51, 51, 0.85);
+    background-color: rgba(51, 51, 51, 0.85); /* Lets the blurred background slightly show behind boxes */
     border: 5px solid #ff0000;
     border-radius: 10px;
     padding: 20px;
@@ -74,7 +74,6 @@ h1 {
     margin-top: 5px;
 }
 
-/* Clicker area holding either Baldi or the video */
 .clicker-box {
     position: relative;
     width: 250px;
@@ -105,7 +104,6 @@ h1 {
     transform: scale(0.95);
 }
 
-/* Video overlays perfectly over Baldi when spam-clicked */
 #first-clip, #second-clip {
     display: none;
     position: absolute;
@@ -130,7 +128,6 @@ h1 {
     to { opacity: 1; }
 }
 
-/* Right Side: Upgrades Shop Panel */
 .right-side {
     width: 400px;
     background-color: rgba(34, 34, 34, 0.95);
@@ -222,7 +219,6 @@ h4 {
     cursor: not-allowed;
 }
 
-/* Loading Screen Setup */
 #loading-screen {
     position: fixed;
     top: 0;

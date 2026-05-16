@@ -46,3 +46,26 @@
     font-size: 18px;
     margin-top: 15px;
 }
+/* Video sizing and positioning */
+#first-clip, #second-clip {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    border: 4px solid yellow;
+    z-index: 10;
+    background: black;
+}
+
+/* This makes FirstClip.mp4 smoothly fade in over 2.3 seconds */
+#first-clip {
+    animation: fadeInVideo 2.3s ease-in-out forwards;
+}
+
+@keyframes fadeInVideo {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

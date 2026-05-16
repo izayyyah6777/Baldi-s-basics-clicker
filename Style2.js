@@ -64,7 +64,6 @@ setInterval(() => {
 const notebookDisplay = document.getElementById('notebook-count');
 const npsDisplay = document.getElementById('nps-count');
 const baldiBtn = document.getElementById('baldi-btn');
-const panel = document.getElementById('upgrades-panel');
 
 function updateUI() {
     notebookDisplay.textContent = Math.floor(notebooks);
@@ -90,9 +89,6 @@ baldiBtn.addEventListener('mousedown', () => {
     updateUI();
     checkSpamSpeed();
 });
-
-document.getElementById('open-panel-btn').addEventListener('click', () => panel.style.display = 'block');
-document.getElementById('close-panel-btn').addEventListener('click', () => panel.style.display = 'none');
 
 document.getElementById('upgrade-click').addEventListener('click', () => {
     if (notebooks >= clickCost) { notebooks -= clickCost; notebooksPerClick += 1; clickCost = Math.round(clickCost * 1.5); updateUI(); }

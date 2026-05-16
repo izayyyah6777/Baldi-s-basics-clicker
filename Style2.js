@@ -15,6 +15,7 @@ const baldiFacts = [
     "Fact: Baldi's favorite food is crunchy quarters... just kidding, he likes notebooks!",
     "Fact: Playtime just wants to jump rope with you. Five times!",
     "Fact: If you click so fast on baldi duddy and Mike(Michael) will appear!"
+    "dad meet baldi baldi baldi baldi ba- ba- baldi"
 ];
 
 const randomFact = baldiFacts[Math.floor(Math.random() * baldiFacts.length)];
@@ -32,19 +33,20 @@ let transitionsToLoop = false;
 const firstVideo = document.getElementById('first-clip');
 const secondVideo = document.getElementById('second-clip');
 
-// When the first video naturally ends, if the user is still spamming, go straight to the looping video
+// 1. When the first video naturally ends, transition to the second looping video
 firstVideo.addEventListener('ended', () => {
     if (clickTimes.length >= SPAM_THRESHOLD) {
         firstVideo.style.display = 'none';
         secondVideo.style.display = 'block';
-        secondVideo.play();
+        secondVideo.loop = true; // Hard-coded insurance policy to make it loop!
+        secondVideo.play().catch(err => console.log("Audio playback waiting for click:", err));
         transitionsToLoop = true;
     } else {
-        // If they stopped clicking by the time it finished, hide everything
         resetVideos();
     }
 });
 
+// 2. Track click speed
 function checkSpamSpeed() {
     const now = Date.now();
     clickTimes.push(now);
@@ -54,15 +56,14 @@ function checkSpamSpeed() {
         if (!firstVideoStarted) {
             firstVideoStarted = true;
             firstVideo.style.display = 'block';
-            firstVideo.play();
-        } else if (transitionsToLoop && secondVideo.paused) {
-            // Keep looping second video alive if they are active
-            secondVideo.style.display = 'block';
-            secondVideo.play();
+            firstVideo.play().catch(err => console.log("Video playback waiting for click:", err));
         }
+        // If we are already on the second video, DO NOT call play() again 
+        // because calling play() repeatedly stops it from looping naturally!
     }
 }
 
+// 3. Clear everything when clicking stops completely
 function resetVideos() {
     firstVideo.pause(); 
     firstVideo.currentTime = 0; 
@@ -76,7 +77,7 @@ function resetVideos() {
     transitionsToLoop = false;
 }
 
-// Monitors if the player stops clicking
+// Monitor for inactivity (player stopped clicking)
 setInterval(() => {
     const now = Date.now();
     clickTimes = clickTimes.filter(time => now - time < 1000);
@@ -116,4 +117,20 @@ baldiBtn.addEventListener('mousedown', () => {
 });
 
 document.getElementById('upgrade-click').addEventListener('click', () => {
-    if
+    if (notebooks >= clickCost) { notebooks -= clickCost; notebooksPerClick += 1; clickCost = Math.round(clickCost * 1.5); updateUI(); }
+});
+document.getElementById('upgrade-multiplier').addEventListener('click', () => {
+    if (notebooks >= multCost) { notebooks -= multCost; multiplier *= 2; multCost = Math.round(multCost * 2.5); updateUI(); }
+});
+document.getElementById('upgrade-auto1').addEventListener('click', () => {
+    if (notebooks >= auto1Cost) { notebooks -= auto1Cost; notebooksPerSecond += 1; auto1Cost = Math.round(auto1Cost * 1.6); updateUI(); }
+});
+document.getElementById('upgrade-auto2').addEventListener('click', () => {
+    if (notebooks >= auto2Cost) { notebooks -= auto2Cost; notebooksPerSecond += 5; auto2Cost = Math.round(auto2Cost * 1.7); updateUI(); }
+});
+
+setInterval(() => {
+    if (notebooksPerSecond > 0) { notebooks += (notebooksPerSecond / 10); updateUI(); }
+}, 100);
+
+updateUI();

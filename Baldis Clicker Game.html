@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baldi's Basics Clicker Game</title>
+    <title>Baldi's Basics Clicker</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         body {
-            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            /* Applied Comic Neue as the primary font for the entire game */
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', sans-serif;
             color: white;
             text-align: center;
             margin: 0;
@@ -153,6 +157,7 @@
             border-radius: 5px;
             margin-top: 15px;
             box-shadow: 2px 2px 5px black;
+            font-family: inherit; /* Inherits Comic Neue font */
         }
 
         #upgrades-panel {
@@ -192,6 +197,7 @@
             font-weight: bold;
             cursor: pointer;
             border-radius: 3px;
+            font-family: inherit;
         }
 
         .cube-wrapper {
@@ -253,6 +259,7 @@
             border-radius: 5px;
             width: 100%;
             text-align: left;
+            font-family: inherit; /* Inherits Comic Neue font */
         }
 
         .upgrade-btn:disabled {
@@ -268,6 +275,11 @@
         <div class="loading-box">
             <h2>LOADING SCHOOLHOUSE...</h2>
             <div class="spinner"></div>
+            
+            <div style="font-size: 14px; color: #ffffff; margin-bottom: 10px; font-weight: bold; text-shadow: 1px 1px 2px #000000;">
+                &copy; Made By Izayah Orona
+            </div>
+            
             <div id="fact-display">Loading...</div>
         </div>
     </div>

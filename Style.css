@@ -1,0 +1,48 @@
+/* This covers the whole screen until the game loads */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000; /* Dark background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Keeps it on top of everything else */
+}
+
+/* The box in the middle */
+.loading-box {
+    background-color: #333;
+    border: 5px solid #00ff00; /* Baldi Green Border */
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+}
+
+/* The spinning loading wheel */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border-left-color: #00ff00;
+    margin: 20px auto;
+    animation: spin 1s linear infinite;
+}
+
+/* This makes the wheel spin around */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Style for the Baldi facts */
+#fact-display {
+    color: #ffff00; /* Yellow text */
+    font-style: italic;
+    font-size: 18px;
+    margin-top: 15px;
+}
